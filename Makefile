@@ -5,11 +5,15 @@
 
 .PHONY: all run test
 
-all: run
+all: main nn
 
-run:
-	@racket main.rkt
+main:
+	racket main.rkt
+
+nn:
+	racket nn.rkt
 
 test:
-	@raco test main.rkt
+	raco test main.rkt
+	raco test nn.rkt
 
