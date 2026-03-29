@@ -2,52 +2,51 @@
 (module+ test
   (require rackunit))
 
+;vect* : list? list? -> list/
 (define-syntax vct*
   (syntax-rules ()
     [(mtx* x1 x2)
      (map * x1 x2)]))
 
+;vect+ : list? -> list?
 (define-syntax vct+
   (syntax-rules ()
     [(sum x)
      (apply + x)]))
 
-;; percepon
-
+;;percepon
+;and-gate : list? list? -> number?
 (define (and-gate x1 x2)
-  (let* ((x (list x1 x2))
-         (w (list 0.5 0.5))
-         (tmp (+ (vct+ (vct* x w)) -0.7)))
-    (if (<= tmp 0)
-      0
-      1)))
+  (let* ([x (list x1 x2)]
+         [w (list 0.5 0.5)]
+         [tmp (+ (vct+ (vct* x w)) -0.7)])
+    (if (<= tmp 0) 0 1)))
 
+;nand-gate : list? list? -> number?
 (define (nand-gate x1 x2)
-  (let* ((x (list x1 x2))
-         (w (list -0.5 -0.5))
-         (tmp (+ (vct+ (vct* x w)) 0.7)))
-    (if (<= tmp 0)
-      0
-      1)))
+  (let* ([x (list x1 x2)]
+         [w (list -0.5 -0.5)]
+         [tmp (+ (vct+ (vct* x w)) 0.7)])
+    (if (<= tmp 0) 0 1)))
 
+;or-gate : list? list? -> number?
 (define (or-gate x1 x2)
-  (let* ((x (list x1 x2))
-         (w (list 0.5 0.5))
-         (tmp (+ (vct+ (vct* x w)) -0.2)))
-    (if (<= tmp 0)
-      0
-      1)))
+  (let* ([x (list x1 x2)]
+         [w (list 0.5 0.5)]
+         [tmp (+ (vct+ (vct* x w)) -0.2)])
+    (if (<= tmp 0) 0 1)))
 
+;xor-gate : list? list? -> number?
 (define (xor-gate x1 x2)
-  (let ((s1 (nand-gate x1 x2))
-        (s2 (or-gate x1 x2)))
+  (let ([s1 (nand-gate x1 x2)]
+        [s2 (or-gate x1 x2)])
     (and-gate s1 s2)))
 
-(module+ test
-  ;; Any code in this `test` submodule runs when this file is run using DrRacket
-  ;; or with `raco test`. The code here does not run when this file is
-  ;; required by another module.
 
+
+(module+ test
+
+  ;vect* vect+
   (check-equal? (vct* '(1 2) '(3 4)) '(3 8))
   (check-equal? (vct* '(0 0) '(0.5 0.5)) '(0 0))
   (check-equal? (vct+ (vct* '(0 0) '(0.5 0.5))) 0)
@@ -78,7 +77,6 @@
   (check-equal? (xor-gate 1 0) 1)
   (check-equal? (xor-gate 0 1) 1)
   (check-equal? (xor-gate 1 1) 0)
-
 
 )
 (module+ main
